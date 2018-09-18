@@ -239,7 +239,7 @@ def myCommand():
             command = myCommand()
     except Exception as e:
         pass
-    #
+
     s.sendall(command.encode("utf-8"))
 
     print(("You said: " + command))
@@ -342,6 +342,8 @@ def youtube(command):
     vid = command
     if "youtube" == command[0:7]:
         vid = vid[7:]
+    if "play" == command[0:4]:
+        vid = vid[4:]
     try:
         vid_search = vid
 
@@ -393,8 +395,8 @@ def YouTubeCommands(command):
     print("IN YOUTUBE COMMANDS")
     if "full screen" in command:
         try:
-            classname = 'button.ytp-fullscreen-button'
-            button = driver.find_element_by_css_selector(classname).click()
+            classname = 'ytp-fullscreen-button'
+            button = driver.find_element_by_class_name(classname).click()
         except Exception as e:
             print(e)
     elif "play" in command or "pause" in command:
@@ -480,7 +482,7 @@ def clickHref(search_for):
                         click_link = link[6:len(link) - 1]
         print("THIS IS CLICK_LINK: ", click_link)
 
-        if ".com" not in click_link and ".org" not in click_link:
+        if ".com" not in click_link and ".org" not in click_link and click_link != "":
             driverURL = driver.current_url.split(".com")
             print(driverURL)
             goToLink = driverURL[0] + ".com" + click_link
@@ -596,8 +598,16 @@ def assistant(command):
         #Internet--YouTube
     elif ("youtube" in command[0:7]) and ("search youtube" not in command) and ("youtube search" not in command):
         youtube(command)
-    elif command in youtube_commands:
-        YouTubeCommands(command)
+    elif "play" in command[0:4]:
+        youtube(command)
+    # elif command in youtube_commands:
+    #     YouTubeCommands(command)
+    elif "full screen" in command:
+        try:
+            classname = 'ytp-fullscreen-button'
+            button = driver.find_element_by_class_name(classname).click()
+        except Exception as e:
+            print(e)
     elif command == "download video":
         downloadYouTube(youtube_tab)
     elif command == "download music":
